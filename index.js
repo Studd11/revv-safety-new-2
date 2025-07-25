@@ -6,7 +6,7 @@ app.use(express.json());
 app.use(express.static(__dirname));
 
 // Configuration (replace with your connection string)
-const connectionString = 'DefaultEndpointsProtocol=https;AccountName=revvsafetynew2;AccountKey=NWiK/ZENL+HZaFz1E6JEGnD/CIBPRHLvuakzLjaIBnTuCe1qZ1rZfwi8rmuMaqyEl/4BbXFTYtUY+AStPN39+w==;EndpointSuffix=core.windows.net'; // Paste your storage account connection string here
+const connectionString = 'DefaultEndpointsProtocol=https;AccountName=revvsafetyusdata;AccountKey=pBnOCEu5zixCBzjORNd1KndafZdFxfS/mNIvePFd/jmxENyLuPk5+7op6cmZ1Vux1bModboz4V+C+ASt+ZjdaQ==;EndpointSuffix=core.windows.net'; // Paste your storage account connection string here
 const containerName = 'reports';
 const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
 const containerClient = blobServiceClient.getContainerClient(containerName);
