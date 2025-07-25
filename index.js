@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 app.use(express.static(__dirname));
 
-const connectionString = 'YOUR_CONNECTION_STRING_HERE'; // Replace with Central US string
+const connectionString = 'DefaultEndpointsProtocol=https;AccountName=revvsafetyusdata;AccountKey=pBnOCEu5zixCBzjORNd1KndafZdFxfS/mNIvePFd/jmxENyLuPk5+7op6cmZ1Vux1bModboz4V+C+ASt+ZjdaQ==;EndpointSuffix=core.windows.net'; // Replace with Central US string
 console.log('Connection string set');
 const containerName = 'reports';
 try {
