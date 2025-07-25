@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: read #This is required for actions/checkout
 
@@ -28,7 +28,7 @@ jobs:
           npm install
           npm run build --if-present
           npm run test --if-present
-      
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -51,13 +51,13 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_E99554094F06419F8BADCC27B8144AA4 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_51DAAA1C95E1472D800440183E6D53C5 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_FEFC17C88C3F49A5BBEDC873254D0295 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_2AD50BDF293E4CA48A75A57FC63EE25C }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_DA18C60B0A8E438190CCDB1497C27111 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F5A32D667AEE4B71B5A8B1952A5D6943 }}
 
       - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'revvsafetynewusapp'
           slot-name: 'Production'
