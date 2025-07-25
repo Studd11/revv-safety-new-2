@@ -1,8 +1,248 @@
 <!DOCTYPE html>
-<html>
-<head><title>Revv Safety Report</title></head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revv Aviation Safety Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #F4F4F9; color: #1A3550; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header img { max-width: 200px; height: auto; }
+        .header p { font-style: italic; color: #F05A28; }
+        .form-container, .report-container { max-width: 800px; margin: 0 auto; padding: 20px; background-color: #FFFFFF; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border: 2px solid #F05A28; }
+        label { display: block; margin: 10px 0 5px; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #1A3550; border-radius: 4px; }
+        button { padding: 10px 20px; background-color: #1A3550; color: #FFFFFF; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px; }
+        button:hover { background-color: #F05A28; }
+        .report-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .report-table th, .report-table td { border: 1px solid #1A3550; padding: 8px; text-align: left; }
+        .report-table th { background-color: #1A3550; color: #FFFFFF; }
+        .hidden { display: none; }
+        @media (max-width: 600px) { .form-container, .report-container { padding: 15px; } button { width: 100%; margin-bottom: 10px; } }
+    </style>
+</head>
 <body>
-  <h1>Revv Aviation Safety Report</h1>
-  <p>Form coming soon!</p>
+    <div class="header">
+        <img src="revv_logo.png" alt="Revv Aviation Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+        <p style="display:none;">Aviation, from the ground up</p>
+        <p>Aviation, from the ground up</p>
+    </div>
+    <div class="form-container">
+        <h2>Revv Aviation Safety and Hazard Report</h2>
+        <label for="report-date">Report Date:</label>
+        <input type="date" id="report-date" required>
+        <label for="reporter-name">Reporter Name:</label>
+        <input type="text" id="reporter-name" required>
+        <label for="site">Site/Location:</label>
+        <select id="site" required>
+            <option value="">Select Site</option>
+            <option value="ARR">ARR</option>
+            <option value="DVN">DVN</option>
+            <option value="CBF">CBF</option>
+            <option value="JVL">JVL</option>
+            <option value="OMA">OMA</option>
+            <option value="MLI">MLI</option>
+            <option value="FXE">FXE</option>
+            <option value="MUT">MUT</option>
+        </select>
+        <label for="event-type">Event Type:</label>
+        <select id="event-type" required>
+            <option value="">Select Event Type</option>
+            <option value="Hazard">Hazard</option>
+            <option value="WX">WX</option>
+            <option value="Flight School MX">Flight School MX</option>
+            <option value="145 MX">145 MX</option>
+            <option value="135 MX">135 MX</option>
+            <option value="Flight School">Flight School</option>
+            <option value="FBO">FBO</option>
+            <option value="Charter">Charter</option>
+        </select>
+        <label for="severity">Severity:</label>
+        <select id="severity" required>
+            <option value="">Select Severity</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+            <option value="Critical">Critical</option>
+        </select>
+        <label for="description">Event Description:</label>
+        <textarea id="description" rows="5" required></textarea>
+        <label for="corrective-action">Corrective Action Taken/Proposed:</label>
+        <textarea id="corrective-action" rows="3"></textarea>
+        <label for="aircraft-reg">Aircraft Registration (if applicable):</label>
+        <input type="text" id="aircraft-reg">
+        <label for="flight-number">Flight Number (if applicable):</label>
+        <input type="text" id="flight-number">
+        <button onclick="submitReport()">Submit Report</button>
+    </div>
+    <div class="report-container">
+        <h2>Generate Reports</h2>
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username">
+            <label for="password">Password:</label>
+            <input type="password" id="password">
+            <button onclick="authenticate()">Access Reports</button>
+        </div>
+        <div id="report-content" class="hidden">
+            <label for="filter-site">Filter by Site:</label>
+            <select id="filter-site">
+                <option value="">All Sites</option>
+                <option value="ARR">ARR</option>
+                <option value="DVN">DVN</option>
+                <option value="CBF">CBF</option>
+                <option value="JVL">JVL</option>
+                <option value="OMA">OMA</option>
+                <option value="MLI">MLI</option>
+                <option value="FXE">FXE</option>
+                <option value="MUT">MUT</option>
+            </select>
+            <label for="filter-type">Filter by Event Type:</label>
+            <select id="filter-type">
+                <option value="">All Types</option>
+                <option value="Hazard">Hazard</option>
+                <option value="WX">WX</option>
+                <option value="Flight School MX">Flight School MX</option>
+                <option value="145 MX">145 MX</option>
+                <option value="135 MX">135 MX</option>
+                <option value="Flight School">Flight School</option>
+                <option value="FBO">FBO</option>
+                <option value="Charter">Charter</option>
+            </select>
+            <label for="filter-date">Filter by Date Range:</label>
+            <input type="date" id="filter-date-start"> to <input type="date" id="filter-date-end">
+            <button onclick="generateReport()">Generate Report</button>
+            <button onclick="exportToCSV()">Export to CSV</button>
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Reporter</th>
+                        <th>Site</th>
+                        <th>Event Type</th>
+                        <th>Severity</th>
+                        <th>Description</th>
+                        <th>Corrective Action</th>
+                        <th>Aircraft Reg</th>
+                        <th>Flight Number</th>
+                    </tr>
+                </thead>
+                <tbody id="report-body"></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="footer">
+        <p>Revv Aviation: Bringing personal aviation to small-town communities with safety and excellence.</p>
+    </div>
+    <script>
+        let isAuthenticated = false;
+        let reports = [];
+
+        function authenticate() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            if (username === 'admin' && password === 'pass123') {
+                isAuthenticated = true;
+                document.getElementById('report-content').classList.remove('hidden');
+                generateReport();
+            } else {
+                alert('Invalid credentials. Please try again.');
+            }
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        function submitReport() {
+            const report = {
+                date: document.getElementById('report-date').value,
+                reporter: document.getElementById('reporter-name').value,
+                site: document.getElementById('site').value,
+                eventType: document.getElementById('event-type').value,
+                severity: document.getElementById('severity').value,
+                description: document.getElementById('description').value,
+                correctiveAction: document.getElementById('corrective-action').value,
+                aircraftReg: document.getElementById('aircraft-reg').value,
+                flightNumber: document.getElementById('flight-number').value
+            };
+            if (!report.date || !report.reporter || !report.site || !report.eventType || !report.severity || !report.description) {
+                alert('Please fill out all required fields.');
+                return;
+            }
+            fetch('/save-report', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(report)
+            })
+            .then(response => response.text())
+            .then(message => {
+                alert(message);
+                reports.push(report); // Add to local array for testing
+                document.getElementById('report-date').value = '';
+                document.getElementById('reporter-name').value = '';
+                document.getElementById('site').value = '';
+                document.getElementById('event-type').value = '';
+                document.getElementById('severity').value = '';
+                document.getElementById('description').value = '';
+                document.getElementById('corrective-action').value = '';
+                document.getElementById('aircraft-reg').value = '';
+                document.getElementById('flight-number').value = '';
+            })
+            .catch(error => alert('Error saving report: ' + error));
+        }
+
+        function generateReport() {
+            if (!isAuthenticated) {
+                alert('Please authenticate to generate reports.');
+                return;
+            }
+            const filterSite = document.getElementById('filter-site').value;
+            const filterType = document.getElementById('filter-type').value;
+            const filterDateStart = document.getElementById('filter-date-start').value;
+            const filterDateEnd = document.getElementById('filter-date-end').value;
+            const reportBody = document.getElementById('report-body');
+            reportBody.innerHTML = '';
+            reports.forEach(report => {
+                if ((filterSite === '' || report.site === filterSite) &&
+                    (filterType === '' || report.eventType === filterType) &&
+                    (!filterDateStart || report.date >= filterDateStart) &&
+                    (!filterDateEnd || report.date <= filterDateEnd)) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${report.date}</td>
+                        <td>${report.reporter}</td>
+                        <td>${report.site}</td>
+                        <td>${report.eventType}</td>
+                        <td>${report.severity}</td>
+                        <td>${report.description}</td>
+                        <td>${report.correctiveAction || ''}</td>
+                        <td>${report.aircraftReg || ''}</td>
+                        <td>${report.flightNumber || ''}</td>
+                    `;
+                    reportBody.appendChild(row);
+                }
+            });
+            if (reportBody.innerHTML === '') {
+                reportBody.innerHTML = '<tr><td colspan="9">No reports match the filters.</td></tr>';
+            }
+        }
+
+        function exportToCSV() {
+            if (!isAuthenticated) {
+                alert('Please authenticate to export reports.');
+                return;
+            }
+            let csv = 'Date,Reporter,Site,Event Type,Severity,Description,Corrective Action,Aircraft Reg,Flight Number\n';
+            reports.forEach(report => {
+                csv += `${report.date},${report.reporter},${report.site},${report.eventType},${report.severity},"${report.description}",${report.correctiveAction || ''},${report.aircraftReg || ''},${report.flightNumber || ''}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'revv_safety_reports.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
 </body>
 </html>
